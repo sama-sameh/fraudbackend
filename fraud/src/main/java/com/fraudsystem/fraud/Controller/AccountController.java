@@ -17,6 +17,9 @@ public class AccountController {
         this.accountService = accountService;
     }
     @PostMapping("/create")
+//    public void createAccount(@RequestBody AccountDTO account) {
+//        System.out.println(account);
+//    }
     public ResponseEntity<Account> createAccount(@RequestBody AccountDTO account) {
         return ResponseEntity.ok(accountService.createAccount(account));
     }
@@ -24,5 +27,12 @@ public class AccountController {
     public ResponseEntity<List<Account>> getAllAccounts() {
         return ResponseEntity.ok(accountService.getAllAccounts());
     }
-
+    @GetMapping("/types")
+    public ResponseEntity<List<String>> getAccountTypes() {
+        return ResponseEntity.ok(accountService.getTypes());
+    }
+    @GetMapping("/currencies")
+    public ResponseEntity<List<String>> getCurrencies() {
+        return ResponseEntity.ok(accountService.getCurrencies());
+    }
 }

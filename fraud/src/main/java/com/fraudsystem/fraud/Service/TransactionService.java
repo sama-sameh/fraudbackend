@@ -1,6 +1,7 @@
 package com.fraudsystem.fraud.Service;
 
 import com.fraudsystem.fraud.Entity.Account;
+import com.fraudsystem.fraud.Entity.Device;
 import com.fraudsystem.fraud.Entity.Transaction;
 import com.fraudsystem.fraud.Repository.TransactionRepository;
 import jakarta.transaction.Transactional;
@@ -15,36 +16,37 @@ import java.util.Objects;
 public class TransactionService {
     private TransactionRepository transactionRepository;
     private AccountService accountService;
+    private DeviceService deviceService;
 
     @Autowired
-    public TransactionService(TransactionRepository transactionRepository, AccountService accountService) {
+    public TransactionService(TransactionRepository transactionRepository, AccountService accountService, DeviceService deviceService) {
         this.transactionRepository = transactionRepository;
         this.accountService = accountService;
+        this.deviceService = deviceService;
     }
     @Transactional
     public boolean manageTransaction(Transaction transaction) {
-        Account account = this.accountService.getAccount(transaction.getAccount().getAccount_no());
-        transaction.setAccount(account);
+        Account accountTo = this.accountService.getAccount(transaction.getAccountTo().getAccount_no());
+        Account accountFrom = this.accountService.getAccount(transaction.getAccountFrom().getAccount_no());
+        transaction.setAccountFrom(accountFrom);
+        transaction.setAccountTo(accountTo);
         transaction.setDate(new Date());
-        if (transaction.getType().equals("deposit"))
+//        Device device = this.deviceService.addDevice(transaction.getDevice());
+//        transaction.setDevice(device);
+        if (transaction.getType().equals("transfer"))
         {
-            if (this.deposit(transaction.getAmount(),transaction.getAccount().getAccount_no())){
-                transaction.setStatus("Accepted");
-                this.save(transaction);
-                return true;
-            }
-        }
-        else if(transaction.getType().equals("withdraw"))
-        {
-            if (this.withdraw(transaction.getAmount(),transaction.getAccount().getAccount_no())){
-                transaction.setStatus("Accepted");
-                this.save(transaction);
-                return true;
-            }
+           if(this.withdraw(transaction.getAmount(), transaction.getAccountFrom().getAccount_no())){
+               this.deposit(transaction.getAmount(), transaction.getAccountTo().getAccount_no());
+               transaction.setStatus("Accepted");
+//               System.out.println(device.getDevice_id());
+               this.transactionRepository.save(transaction);
+               return true;
+           }
         }
         transaction.setStatus("Refused");
         return false;
     }
+
     @Transactional
     public boolean deposit(double amount,int to) {
         return accountService.updateBalance(to, amount) != null;

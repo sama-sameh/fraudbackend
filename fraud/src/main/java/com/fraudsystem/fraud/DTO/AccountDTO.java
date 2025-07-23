@@ -7,4 +7,5 @@ public class AccountDTO {
     private int customerId;
     private String type;
     private String currency;
+    private double balance;
 }

@@ -28,10 +28,11 @@ public class AccountService {
     @Transactional
     public Account createAccount(AccountDTO dto) {
         Account account = new Account();
-        account.setBalance(0.0);
+        account.setBalance(dto.getBalance());
         account.setType(dto.getType());
         account.setCurrency(dto.getCurrency());
         account.setCustomer(customerRepository.getById(dto.getCustomerId()));
+        account.setStatus("active");
         return accountRepository.save(account);
     }
     @Transactional
@@ -40,4 +41,11 @@ public class AccountService {
         account.setBalance(account.getBalance()+balance);
         return accountRepository.save(account);
     }
+    public List<String> getTypes(){
+        return List.of("Saving","Current");
+    }
+    public List<String> getCurrencies(){
+        return List.of("EGP","USD","EUR","AUD");
+    }
+
 }

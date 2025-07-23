@@ -27,4 +27,7 @@ public class Customer {
     @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
     @JsonIgnore
     List<Account> account;
+    @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
+    @JsonIgnore
+    List<CustomerActivity> customerActivity;
 }

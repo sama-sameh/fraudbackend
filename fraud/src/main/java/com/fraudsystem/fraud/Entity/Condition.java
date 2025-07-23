@@ -20,9 +20,16 @@ public class Condition {
     String type;
     @Column(name="operator")
     String operator;
+    @Column(name="field")
+    String field;
     @Column(name="value")
-    Float value;
+    String value;
+    @Column(name="value_type")
+    String valueType;
+    @Column(name="logical_connector")
+    String logicalConnector;
     @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="rule_id")
     Rule rule;
+
 }
