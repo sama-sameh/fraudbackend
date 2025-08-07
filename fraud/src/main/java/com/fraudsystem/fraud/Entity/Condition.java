@@ -28,7 +28,15 @@ public class Condition {
     String valueType;
     @Column(name="logical_connector")
     String logicalConnector;
-    @ManyToOne(cascade=CascadeType.ALL)
+    @Column(name="source")
+    String source;
+    @Column(name="source_field")
+    String sourceField;
+    @Column(name="time_interval")
+    String time_interval;
+    @Column(name="aggregation_function")
+    String aggregationFunction;
+    @ManyToOne
     @JoinColumn(name="rule_id")
     Rule rule;
 

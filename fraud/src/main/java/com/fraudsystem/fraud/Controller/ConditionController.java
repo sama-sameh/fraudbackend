@@ -36,7 +36,11 @@ public class ConditionController {
 
     @GetMapping("/conditionsbyrule/{ruleId}")
     public ResponseEntity<List<Condition>> getConditionsByRuleId(@PathVariable int ruleId) {
-        return ResponseEntity.ok(conditionService.getConditionsByRuleId(ruleId));
+        return ResponseEntity.ok(conditionService.getConditionsByRule(ruleId));
+    }
+    @DeleteMapping("/delete/{conditionId}")
+    public void deleteConditionById(@PathVariable int conditionId) {
+        conditionService.deleteConditionById(conditionId);
     }
 
 }

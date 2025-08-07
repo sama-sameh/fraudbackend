@@ -25,5 +25,9 @@ public class TransactionController {
     public ResponseEntity<Boolean> makeTransaction(@RequestBody  Transaction transaction) {
         return  ResponseEntity.ok(transactionService.manageTransaction(transaction));
     }
+    @GetMapping("/run")
+    public void runTransaction() {
+      transactionService.runRules();
+    }
 
 }

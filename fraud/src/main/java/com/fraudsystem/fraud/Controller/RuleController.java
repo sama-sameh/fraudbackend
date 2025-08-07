@@ -30,6 +30,10 @@ public class RuleController {
     public ResponseEntity<Rule> createRule(@RequestBody Rule rule) {
         return ResponseEntity.ok(ruleService.addRule(rule));
     }
+    @DeleteMapping("delete/{ruleId}")
+    public void deleteRule(@PathVariable int ruleId) {
+        ruleService.deleteRuleById(ruleId);
+    }
 
 
 }

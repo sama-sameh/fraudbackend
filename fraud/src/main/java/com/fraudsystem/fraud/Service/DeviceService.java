@@ -33,5 +33,8 @@ public class DeviceService {
     public void deleteDevice(int id) {
         deviceRepository.deleteById(id);
     }
+    public Device getDeviceByIpAndType(Device device) {
+        return deviceRepository.getDeviceByTypeAndIpAddress(device.getType(), device.getIpAddress());
+    }
 
 }

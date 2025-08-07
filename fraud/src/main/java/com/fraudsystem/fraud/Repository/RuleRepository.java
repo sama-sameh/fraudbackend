@@ -1,9 +1,13 @@
 package com.fraudsystem.fraud.Repository;
 
+import com.fraudsystem.fraud.Entity.Condition;
 import com.fraudsystem.fraud.Entity.Rule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface RuleRepository extends JpaRepository<Rule, Integer> {
+    public List<Rule> getRulesByStatus(String status);
 }

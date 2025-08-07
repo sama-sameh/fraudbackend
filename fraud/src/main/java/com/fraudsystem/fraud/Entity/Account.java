@@ -28,9 +28,8 @@ public class Account {
     private Double balance ;
     @Column(name="status")
     private String status;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name="customer_id")
-    @JsonIgnore
     private Customer customer;
     @OneToMany(mappedBy = "accountFrom",cascade = CascadeType.ALL)
     @JsonIgnore

@@ -20,10 +20,10 @@ public class CustomerActivity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="customer_id")
-    Customer customer;
+    @JoinColumn(name="user_id")
+    UserEntity user;
     @Column(name="date")
     LocalDate date;
     @Column(name="failed_attempts")
-    int failedAttempts;
+    int failed_attempts;
 }

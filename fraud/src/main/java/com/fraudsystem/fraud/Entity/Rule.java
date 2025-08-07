@@ -28,4 +28,8 @@ public class Rule {
     String type;
     @Column(name="status")
     String status;
+    @Column(name="message_template")
+    String messageTemplate;
+    @Column(name="priority")
+    String priority;
 }

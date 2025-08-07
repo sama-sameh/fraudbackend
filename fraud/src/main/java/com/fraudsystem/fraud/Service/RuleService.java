@@ -1,5 +1,6 @@
 package com.fraudsystem.fraud.Service;
 
+import com.fraudsystem.fraud.Entity.Condition;
 import com.fraudsystem.fraud.Entity.Rule;
 import com.fraudsystem.fraud.Repository.RuleRepository;
 import jakarta.transaction.Transactional;
@@ -31,7 +32,9 @@ public class RuleService {
     }
     @Transactional
     public void deleteRuleById(int id) {
-        ruleRepository.deleteById(id);
+      ruleRepository.deleteById(id);
     }
-
+    public List<Rule> getRulesStatus(String status){
+        return ruleRepository.getRulesByStatus(status);
+    }
 }

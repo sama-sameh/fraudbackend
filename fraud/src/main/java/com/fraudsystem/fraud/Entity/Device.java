@@ -21,9 +21,9 @@ public class Device {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int device_id;
     @Column(name="device_type")
-    String device_type;
+    String type;
     @Column(name="ip_address")
-    String ip_address;
+    String ipAddress;
 
     @OneToMany(mappedBy = "device" , cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonIgnore

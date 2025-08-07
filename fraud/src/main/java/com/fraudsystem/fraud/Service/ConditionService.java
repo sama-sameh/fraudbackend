@@ -38,7 +38,12 @@ public class ConditionService {
     public void deleteConditionById(int id) {
         conditionRepository.deleteById(id);
     }
-    public List<Condition> getConditionsByRuleId(int id) {
-        return conditionRepository.getConditionsByRuleRuleId(id);
+    public List<Condition> getConditionsByType(Rule rule,String Type) {
+        return conditionRepository.getConditionsByTypeAndRule(Type,rule);
     }
+    public List<Condition> getConditionsByRule(int rule) {
+        return conditionRepository.getConditionsByRuleRuleId(rule);
+    }
+
+
 }

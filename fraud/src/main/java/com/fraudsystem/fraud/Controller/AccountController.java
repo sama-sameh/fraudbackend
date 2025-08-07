@@ -35,4 +35,8 @@ public class AccountController {
     public ResponseEntity<List<String>> getCurrencies() {
         return ResponseEntity.ok(accountService.getCurrencies());
     }
+    @GetMapping("/getAccountForUser")
+    public ResponseEntity<List<Account>> getAccountForUser() {
+        return ResponseEntity.ok(accountService.getAccountsByCustomer());
+    }
 }

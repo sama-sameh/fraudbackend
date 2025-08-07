@@ -35,7 +35,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors() // ✅ Enables CORS support in Spring Security
+                .cors()
                 .and()
                 .csrf().disable()
                 .exceptionHandling()
@@ -44,10 +44,10 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .requestMatchers("/api/**").permitAll()
+                .requestMatchers("/api/auth/**").permitAll()
 //                .requestMatchers("api/admin/**").hasAuthority(Role.ADMIN.name())
 //                .requestMatchers("/api/user/**").hasAuthority(Role.USER.name())
-//                .anyRequest().authenticated()
+                .anyRequest().authenticated()
                 .and()
                 .httpBasic();
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

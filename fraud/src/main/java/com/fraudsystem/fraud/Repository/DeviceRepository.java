@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DeviceRepository extends JpaRepository<Device, Integer> {
+    Device getDeviceByTypeAndIpAddress(String device_type, String ip_address);
 }

@@ -20,10 +20,10 @@ public class Transaction {
     @Column(name = "transaction_no")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int transaction_no;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "account_from")
     Account accountFrom;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "account_to")
     Account accountTo;
     @Column(name = "type")
