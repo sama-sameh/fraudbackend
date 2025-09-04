@@ -1,5 +1,6 @@
 package com.fraudsystem.fraud.Service;
 
+import com.fraudsystem.fraud.Entity.Customer;
 import com.fraudsystem.fraud.Entity.UserEntity;
 import com.fraudsystem.fraud.Repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -45,5 +46,8 @@ public class UserService {
     }
     public void deleteById(Long id) {
         userRepository.deleteById(id);
+    }
+    public UserEntity getUserByCustomer(Customer customer) {
+        return userRepository.findByCustomer(customer);
     }
 }

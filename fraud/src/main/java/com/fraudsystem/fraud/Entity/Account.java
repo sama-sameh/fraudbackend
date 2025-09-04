@@ -31,6 +31,9 @@ public class Account {
     @ManyToOne
     @JoinColumn(name="customer_id")
     private Customer customer;
+    @OneToOne(mappedBy = "account")
+    @JsonIgnore
+    private CreditCard creditCard;
     @OneToMany(mappedBy = "accountFrom",cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Transaction> transactions;

@@ -21,6 +21,7 @@ import java.util.*;
 
 @Service
 public class AlertService {
+    private final AccountService accountService;
     private AlertRepository alertRepository;
     private RuleService ruleService;
     private EntityManager entityManager;
@@ -28,12 +29,13 @@ public class AlertService {
     CustomerService customerService;
 
     @Autowired
-    public AlertService(AlertRepository alertRepository,RuleService ruleService, EntityManager entityManager, ConditionService conditionService, CustomerService customerService){
+    public AlertService(AlertRepository alertRepository, RuleService ruleService, EntityManager entityManager, ConditionService conditionService, CustomerService customerService, AccountService accountService){
         this.alertRepository = alertRepository;
         this.ruleService = ruleService;
         this.entityManager = entityManager;
         this.conditionService = conditionService;
         this.customerService = customerService;
+        this.accountService = accountService;
     }
     public List<Alert> getAllAlerts() {
         List<Alert> suspectList = alertRepository.findAll();
@@ -79,9 +81,13 @@ public class AlertService {
         alertRepository.delete(alert);
     }
     @Transactional
-    public void evaluateTransaction(Transaction transaction) {
+    public void runAllRules(Transaction transaction){
+        List<Rule> rules = ruleService.getRules();
+        evaluateTransaction(rules,transaction);
+    }
+    @Transactional
+    public void evaluateTransaction(List<Rule> rules,Transaction transaction) {
 
-        List<Rule> rules = ruleService.getRulesStatus("Published");
 
         for (Rule rule : rules) {
             if (ViolateRule(transaction, rule)){
@@ -437,15 +443,22 @@ public class AlertService {
         return resultMap;
     }
     @Transactional
-    public void runRules(List<Transaction> transactions){
-            for (Transaction transaction : transactions) {
-//                if(alertRepository.existsByTransaction(transaction))
-//                    continue;
-                evaluateTransaction(transaction);
+    public void runSpecificRules(List<Integer> rulesId,List<Transaction> transactions){
+        List<Rule> rules = new ArrayList<>();
+        for (int id :rulesId){
+            Rule rule = ruleService.getRuleById(id);
+            rules.add(rule);
+        }
+        for (Transaction transaction : transactions) {
+            if(alertRepository.existsByTransaction(transaction))
+                continue;
+            evaluateTransaction(rules,transaction);
 
-            }
-
-
+        }
+    }
+    boolean existsByAccount(int account_no){
+        Account account = accountService.getAccount(account_no);
+        return alertRepository.existsByAccount(account);
     }
 }
 

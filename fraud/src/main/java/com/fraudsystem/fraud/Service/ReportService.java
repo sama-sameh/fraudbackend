@@ -26,7 +26,6 @@ public class ReportService {
         PdfWriter.getInstance(document, baos);
         document.open();
 
-        // Title
         Paragraph title = new Paragraph("Fraud Alert Report", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18));
         title.setAlignment(Element.ALIGN_CENTER);
         document.add(title);
@@ -37,19 +36,16 @@ public class ReportService {
 
         document.add(Chunk.NEWLINE);
 
-        // Set table with 7 columns
         PdfPTable table = new PdfPTable(7);
         table.setWidthPercentage(100); // Take full width
         table.setSpacingBefore(10f);
         table.setSpacingAfter(10f);
 
-        // Set custom column widths
         float[] columnWidths = {1.5f, 1.5f, 3f, 2.5f, 1.5f, 2.5f, 1.5f};
         table.setWidths(columnWidths);
 
-        // Header styling
         Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
-        Stream.of("Suspect ID", "Customer ID", "Customer Name", "Rule", "Priority", "Date", "Alert Age")
+        Stream.of("Suspect No", "Date","Alert Age", "Customer ID", "Customer Name", "Rule", "Priority")
                 .forEach(header -> {
                     PdfPCell cell = new PdfPCell(new Phrase(header, headerFont));
                     cell.setBackgroundColor(Color.LIGHT_GRAY);
@@ -58,25 +54,30 @@ public class ReportService {
                     table.addCell(cell);
                 });
 
-        // Date format
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-        // Data rows
         Font bodyFont = FontFactory.getFont(FontFactory.HELVETICA, 10);
         for (Alert alert : alerts) {
-            table.addCell(new PdfPCell(new Phrase(String.valueOf(alert.getSuspectId()), bodyFont)));
-            table.addCell(new PdfPCell(new Phrase(String.valueOf(alert.getCustomer().getId()), bodyFont)));
-            table.addCell(new PdfPCell(new Phrase(alert.getCustomer().getName(), bodyFont)));
-            table.addCell(new PdfPCell(new Phrase(alert.getRule().getRule_name(), bodyFont)));
-            table.addCell(new PdfPCell(new Phrase(String.valueOf(alert.getRule().getPriority()), bodyFont)));
-            table.addCell(new PdfPCell(new Phrase(dateFormat.format(alert.getDate()), bodyFont)));
-            table.addCell(new PdfPCell(new Phrase(String.valueOf(alert.getAlertAge()), bodyFont)));
+            table.addCell(createCenteredCell(String.valueOf(alert.getSuspectId()), bodyFont));
+            table.addCell(createCenteredCell(dateFormat.format(alert.getDate()), bodyFont));
+            table.addCell(createCenteredCell(String.valueOf(alert.getAlertAge()), bodyFont));
+            table.addCell(createCenteredCell(String.valueOf(alert.getCustomer().getId()), bodyFont));
+            table.addCell(createCenteredCell(alert.getCustomer().getName(), bodyFont));
+            table.addCell(createCenteredCell(alert.getRule().getRule_name(), bodyFont));
+            table.addCell(createCenteredCell(String.valueOf(alert.getRule().getPriority()), bodyFont));
         }
 
         document.add(table);
         document.close();
 
         return baos.toByteArray();
+    }
+    private PdfPCell createCenteredCell(String text, Font font) {
+        PdfPCell cell = new PdfPCell(new Phrase(text, font));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        cell.setPadding(5);
+        return cell;
     }
 
 }

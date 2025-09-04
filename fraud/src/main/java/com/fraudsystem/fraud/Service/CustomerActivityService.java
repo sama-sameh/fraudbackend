@@ -1,6 +1,8 @@
 package com.fraudsystem.fraud.Service;
 
+import com.fraudsystem.fraud.Entity.Customer;
 import com.fraudsystem.fraud.Entity.CustomerActivity;
+import com.fraudsystem.fraud.Entity.UserEntity;
 import com.fraudsystem.fraud.Repository.CustomerActivityRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +15,12 @@ import java.util.Optional;
 public class CustomerActivityService {
     private CustomerActivityRepository customerActivityRepository;
     private SuspectService suspectService;
+    private UserService userService;
     @Autowired
-    public CustomerActivityService(CustomerActivityRepository customerActivityRepository, SuspectService suspectService) {
+    public CustomerActivityService(CustomerActivityRepository customerActivityRepository, SuspectService suspectService, UserService userService) {
         this.customerActivityRepository = customerActivityRepository;
         this.suspectService = suspectService;
+        this.userService = userService;
     }
     @Transactional
     public CustomerActivity addCustomerActivity(CustomerActivity customerActivity) {
@@ -30,6 +34,10 @@ public class CustomerActivityService {
     public Optional<CustomerActivity> getCustomerActivity(Long userId, LocalDate date) {
         return customerActivityRepository.getCustomerActivityByUserIdAndDate(userId,date);
     }
+    public Optional<CustomerActivity> getCustomerActivityByCustomer(Customer customer, LocalDate date) {
+       UserEntity user = userService.getUserByCustomer(customer);
+       return customerActivityRepository.getCustomerActivityByUserIdAndDate(user.getId(),date);
 
+    }
 
 }

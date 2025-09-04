@@ -1,5 +1,6 @@
 package com.fraudsystem.fraud.Repository;
 
+import com.fraudsystem.fraud.Entity.Account;
 import com.fraudsystem.fraud.Entity.Alert;
 import com.fraudsystem.fraud.Entity.Suspect;
 import com.fraudsystem.fraud.Entity.Transaction;
@@ -15,22 +16,24 @@ import java.util.List;
 @Repository
 
 public interface AlertRepository extends JpaRepository<Alert, Integer> {
-    @Query("SELECT FUNCTION('DATE', s.date) AS date, COUNT(s) FROM Suspect s WHERE s.date BETWEEN :startDate AND :endDate GROUP BY FUNCTION('DATE', s.date)")
+    @Query("SELECT FUNCTION('DATE', s.date) AS date, COUNT(s) FROM Alert s WHERE s.date BETWEEN :startDate AND :endDate GROUP BY FUNCTION('DATE', s.date)")
     List<Object[]> getALertsCountBetweenDates(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
 
-    @Query("SELECT r.rule_name, COUNT(s) FROM Suspect s LEFT JOIN Rule r on r.ruleId=s.rule.ruleId GROUP BY r.rule_name")
+    @Query("SELECT r.rule_name, COUNT(s) FROM Alert s LEFT JOIN Rule r on r.ruleId=s.rule.ruleId GROUP BY r.rule_name")
     List<Object[]> countAlertsPerRule();
 
     boolean existsByTransaction(Transaction transaction);
 
     @Query("SELECT s.account.account_no, COUNT(s) as alertCount " +
-            "FROM Suspect s " +
+            "FROM Alert s " +
             "GROUP BY s.account.account_no " +
             "ORDER BY alertCount DESC")
     List<Object[]> countTop10AlertsPerAccount(Pageable pageable);
     @Query("SELECT a FROM Alert a WHERE a.takenAction IS NULL OR a.takenAction = ''")
     List<Alert> findAlertsWithoutActionTaken();
+
+    boolean existsByAccount(Account account);
 
 
 }
